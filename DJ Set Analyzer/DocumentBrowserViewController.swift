@@ -16,7 +16,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         delegate = self
         
         allowsDocumentCreation = true
-        allowsPickingMultipleItems = false
+        allowsPickingMultipleItems = true
         
         // Update the style of the UIDocumentBrowserViewController
         // browserUserInterfaceStyle = .dark
