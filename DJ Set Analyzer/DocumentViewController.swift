@@ -9,9 +9,15 @@ import UIKit
 
 class DocumentViewController: UIViewController {
     
+    let analyzer = Analyzer()
+    
     @IBOutlet weak var documentNameLabel: UILabel!
     
-    var document: UIDocument?
+    var document: UIDocument? {
+        didSet {
+            analyzer.run(self.document!.fileURL)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -11,7 +11,7 @@ import AVFoundation
 import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
-    var urls = [URL]() {
+    private var urls = [URL]() {
         didSet {
             guard urls.last != nil else {
                 return
@@ -31,7 +31,7 @@ class Analyzer : NSObject, SHSessionDelegate {
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        let numOfSegments = Int(ceil(duration / 30) - 1)
+        let numOfSegments = Int(ceil(duration / 10) - 1)
         print("segments:\(numOfSegments)")
         
         guard numOfSegments > 1 else {
