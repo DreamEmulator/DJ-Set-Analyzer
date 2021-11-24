@@ -11,25 +11,22 @@ import AVFoundation
 import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
-        // Set up the session.
-    let session = SHSession()
-    let generator = SHSignatureGenerator()
     var urls = [URL]() {
         didSet {
             guard urls.last != nil else {
                 return
             }
+            print("🔎 Matching segment \(urls.count)")
             self.analyze(urls.last!)
         }
     }
     
     override init (){
         super.init()
-        session.delegate = self
     }
     
     
-    func split (_ url: URL) {
+    func run (_ url: URL) {
         let asset = AVAsset(url: url)
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
@@ -77,6 +74,11 @@ class Analyzer : NSObject, SHSessionDelegate {
     }
     
     func analyze (_ url: URL){
+            // Set up the session.
+        let session = SHSession()
+        session.delegate = self
+        let generator = SHSignatureGenerator()
+        
         // Create a signature from the captured audio buffer.
         guard let audioFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1) else {
             return
