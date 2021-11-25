@@ -10,8 +10,6 @@ import AVFoundation
 import ShazamKit
 
 class Document: UIDocument {
-    let analyzer = Analyzer()
-    
     override func contents(forType typeName: String) throws -> Any {
             // Encode your document with an instance of NSData or NSFileWrapper
         return Data()
@@ -21,6 +19,5 @@ class Document: UIDocument {
             // Load your document from contents
         print("Opened file: \(fileURL)")
     }
-    
 }
 

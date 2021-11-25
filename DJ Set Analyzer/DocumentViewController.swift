@@ -1,15 +1,17 @@
-//
-//  DocumentViewController.swift
-//  DJ Set Analyzer
-//
-//  Created by Sebastiaan Hols on 22/11/2021.
-//
+    //
+    //  DocumentViewController.swift
+    //  DJ Set Analyzer
+    //
+    //  Created by Sebastiaan Hols on 22/11/2021.
+    //
 
 import UIKit
 
-class DocumentViewController: UIViewController {
+class DocumentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    static let cellID = "TracksTableCell"
+    @IBOutlet weak var tableView: UITableView!
     
-    let analyzer = Analyzer()
+    let analyzer : Analyzer = Analyzer()
     
     @IBOutlet weak var documentNameLabel: UILabel!
     
@@ -22,13 +24,18 @@ class DocumentViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Access the document
-        document?.open(completionHandler: { (success) in
+            // Access the document
+        document?.open(completionHandler: { [self] (success) in
             if success {
-                // Display the content of the document, e.g.:
+                    // Display the content of the document, e.g.:
                 self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
+                self.analyzer.active = true
+                analyzer.update = {
+                    tableView.reloadData()
+                    print("UPDATED")
+                }
             } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+                    // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
             }
         })
     }
@@ -36,6 +43,27 @@ class DocumentViewController: UIViewController {
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
             self.document?.close(completionHandler: nil)
+            self.analyzer.active = false
         }
     }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return analyzer.hits.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellID, for: indexPath) as? TrackTableCell else {
+            fatalError("Unable to dequeue TrackTableCell")
+        }
+        cell.trackTitle.text = analyzer.hits[indexPath.row].title
+        cell.trackArtist.text = analyzer.hits[indexPath.row].artist
+        return cell
+    }
+    
+}
+
+class TrackTableCell : UITableViewCell {
+    @IBOutlet weak var trackTitle: UILabel!
+    
+    @IBOutlet weak var trackArtist: UILabel!
 }

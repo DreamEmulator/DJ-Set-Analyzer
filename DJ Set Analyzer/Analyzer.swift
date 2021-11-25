@@ -11,9 +11,10 @@ import AVFoundation
 import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
+    let session = SHSession()
     private var urls = [URL]() {
         didSet {
-            guard urls.last != nil else {
+            guard urls.last != nil && active else {
                 return
             }
             print("🔎 Matching segment \(urls.count)")
@@ -21,17 +22,18 @@ class Analyzer : NSObject, SHSessionDelegate {
         }
     }
     
-    override init (){
-        super.init()
-    }
+    var active = true
     
+    var update : ()->Void = {}
+    
+    var hits = [SHMatchedMediaItem]()
     
     func run (_ url: URL) {
         let asset = AVAsset(url: url)
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        let numOfSegments = Int(ceil(duration / 10) - 1)
+        let numOfSegments = Int(ceil(duration / 100) - 1)
         print("segments:\(numOfSegments)")
         
         guard numOfSegments > 1 else {
@@ -40,6 +42,9 @@ class Analyzer : NSObject, SHSessionDelegate {
         }
         
         for index in 0...numOfSegments {
+            guard active else {
+                break
+            }
             splitAudio(asset: asset, segment: index)
         }
         
@@ -75,11 +80,10 @@ class Analyzer : NSObject, SHSessionDelegate {
     
     func analyze (_ url: URL){
             // Set up the session.
-        let session = SHSession()
         session.delegate = self
         let generator = SHSignatureGenerator()
         
-        // Create a signature from the captured audio buffer.
+            // Create a signature from the captured audio buffer.
         guard let audioFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1) else {
             return
         }
@@ -92,7 +96,7 @@ class Analyzer : NSObject, SHSessionDelegate {
                   let outputBuffer = AVAudioPCMBuffer(pcmFormat: audioFormat, frameCapacity: 44100 * 10) else {
                       return
                   }
-            // Read file into buffer
+                // Read file into buffer
             let inputBlock : AVAudioConverterInputBlock = { inNumPackets, outStatus in
                 do {
                     try audioFile.read(into: inputBuffer)
@@ -118,7 +122,7 @@ class Analyzer : NSObject, SHSessionDelegate {
             if status == .error || status == .endOfStream {
                 return
             }
-                
+            
             try generator.append(outputBuffer, at: nil)
             
             if status == .inputRanDry {
@@ -139,12 +143,14 @@ class Analyzer : NSObject, SHSessionDelegate {
     func session(_ session: SHSession, didFind match: SHMatch) {
             // Do something with the matched results.
         match.mediaItems.forEach { item in
-            item.songs.forEach { song in
-                print(song)
-                print("@\(item.matchOffset)")
+            hits.append(item)
+            print(item.title!)
+            print("@\(item.matchOffset)")
+            DispatchQueue.main.async {
+                self.update()
             }
         }
-    
+        
     }
     
         // The delegate method that the session calls when there is no match.
