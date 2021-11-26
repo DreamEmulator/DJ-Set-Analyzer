@@ -65,13 +65,13 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vCo-YL-7BN" id="qff-S6-Do8">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RR4-h6-KcS">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RR4-h6-KcS">
+                                                    <rect key="frame" x="0.0" y="0.0" width="43.5" height="40"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7yc-Xh-HDE">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="43.5" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="40" id="NtN-gV-lR2"/>
                                                             </constraints>
@@ -79,26 +79,23 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Track" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frR-ab-7be">
-                                                            <rect key="frame" x="0.0" y="40" width="375" height="0.0"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="40" id="6V2-EB-3DM"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                     </subviews>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="80" id="jYz-aT-vQL"/>
-                                                    </constraints>
                                                 </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Track" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frR-ab-7be">
+                                                    <rect key="frame" x="48.5" y="0.0" width="42" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="6V2-EB-3DM"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="RR4-h6-KcS" secondAttribute="bottom" id="3HF-yt-UCE"/>
-                                                <constraint firstAttribute="trailing" secondItem="RR4-h6-KcS" secondAttribute="trailing" id="dqb-M6-CDh"/>
-                                                <constraint firstItem="RR4-h6-KcS" firstAttribute="leading" secondItem="qff-S6-Do8" secondAttribute="leading" id="ksh-ho-Lut"/>
-                                                <constraint firstItem="RR4-h6-KcS" firstAttribute="top" secondItem="qff-S6-Do8" secondAttribute="top" id="yeP-KL-WCu"/>
+                                                <constraint firstItem="RR4-h6-KcS" firstAttribute="leading" secondItem="qff-S6-Do8" secondAttribute="leadingMargin" constant="-16" id="KKB-Ts-2iU"/>
+                                                <constraint firstItem="RR4-h6-KcS" firstAttribute="centerY" secondItem="qff-S6-Do8" secondAttribute="centerY" id="XwN-9Z-FtS"/>
+                                                <constraint firstItem="RR4-h6-KcS" firstAttribute="top" secondItem="frR-ab-7be" secondAttribute="top" id="eGG-pY-EMK"/>
+                                                <constraint firstItem="frR-ab-7be" firstAttribute="leading" secondItem="RR4-h6-KcS" secondAttribute="trailing" constant="5" id="f7e-1V-OcV"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

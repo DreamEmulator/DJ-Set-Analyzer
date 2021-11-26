@@ -12,14 +12,6 @@ import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
     
-    // Set up the session.
-    let session = SHSession()
-    let generator = SHSignatureGenerator()
-    override init() {
-        super.init()
-        session.delegate = self
-    }
-    
     private var urls = [URL]()
     
     var active = true
@@ -82,7 +74,10 @@ class Analyzer : NSObject, SHSessionDelegate {
     }
 
     func analyze (_ url: URL){
-        
+            // Set up the session.
+        let session = SHSession()
+        session.delegate = self
+        let generator = SHSignatureGenerator()
             // Create a signature from the captured audio buffer.
         guard let audioFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1) else {
             return
