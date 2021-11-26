@@ -60,10 +60,16 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = "\(analyzer.hits[indexPath.row].artist!) \(analyzer.hits[indexPath.row].title!)"
+    }
+    
 }
 
 class TrackTableCell : UITableViewCell {
     @IBOutlet weak var trackTitle: UILabel!
     
     @IBOutlet weak var trackArtist: UILabel!
+    
 }

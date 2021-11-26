@@ -25,7 +25,7 @@ class Analyzer : NSObject, SHSessionDelegate {
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        let numOfSegments = (Int(duration) - (Int(duration) % 20)) / 20
+        let numOfSegments = (Int(duration) - (Int(duration) % 180)) / 180
         print("segments:\(numOfSegments)")
         
         guard numOfSegments > 1 else {
