@@ -11,16 +11,16 @@ import AVFoundation
 import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
+    
+    // Set up the session.
     let session = SHSession()
-    private var urls = [URL]() {
-        didSet {
-            guard urls.last != nil && active else {
-                return
-            }
-            print("🔎 Matching segment \(urls.count)")
-            self.analyze(urls.last!)
-        }
+    let generator = SHSignatureGenerator()
+    override init() {
+        super.init()
+        session.delegate = self
     }
+    
+    private var urls = [URL]()
     
     var active = true
     
@@ -33,7 +33,7 @@ class Analyzer : NSObject, SHSessionDelegate {
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        let numOfSegments = Int(ceil(duration / 100) - 1)
+        let numOfSegments = (Int(duration) - (Int(duration) % 20)) / 20
         print("segments:\(numOfSegments)")
         
         guard numOfSegments > 1 else {
@@ -65,23 +65,23 @@ class Analyzer : NSObject, SHSessionDelegate {
             
             exporter.outputURL = outputUrl
                 // Do the actual exporting
-            exporter.exportAsynchronously(completionHandler: {
+            exporter.exportAsynchronously(completionHandler: { [self] in
                 switch exporter.status {
                     case AVAssetExportSession.Status.failed:
                         print("Export failed.")
                     default:
                         print("Export complete.")
-                        self.urls.append(outputUrl)
+                        urls.append(outputUrl)
+                }
+                if numOfSegments == urls.count {
+                    self.analyzeAudioSegments()
                 }
             })
             return
         }
     }
-    
+
     func analyze (_ url: URL){
-            // Set up the session.
-        session.delegate = self
-        let generator = SHSignatureGenerator()
         
             // Create a signature from the captured audio buffer.
         guard let audioFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1) else {
@@ -139,7 +139,15 @@ class Analyzer : NSObject, SHSessionDelegate {
         session.match(signature)
     }
     
-        // The delegate method that the session calls when matching a reference item.
+    func analyzeAudioSegments (){
+        guard !urls.isEmpty else {
+            print("FINISHED ANALYSIS")
+            return
+        }
+        analyze(urls.removeFirst())
+    }
+    
+    // The delegate method that the session calls when matching a reference item.
     func session(_ session: SHSession, didFind match: SHMatch) {
             // Do something with the matched results.
         match.mediaItems.forEach { item in
@@ -150,12 +158,13 @@ class Analyzer : NSObject, SHSessionDelegate {
                 self.update()
             }
         }
-        
+        self.analyzeAudioSegments()
     }
     
         // The delegate method that the session calls when there is no match.
     func session(_ session: SHSession, didNotFindMatchFor signature: SHSignature, error: Error?) {
             // No match found.
         print("No match")
+        self.analyzeAudioSegments()
     }
 }
