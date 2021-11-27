@@ -12,28 +12,39 @@ import UIKit
 
 class Analyzer : NSObject, SHSessionDelegate {
     
-    private var urls = [URL]()
+    var urls = [URL]()
+    
+    var trackSegments = 0
     
     var active = true
     
-    var update : ()->Void = {}
+    var refreshTable : ()->Void = {}
+    var updateProgress : (_ : Progress)->Void = { _ in }
     
     var hits = [SHMatchedMediaItem]()
     
+    func reset () {
+        urls = [URL]()
+        active = false
+        hits = [SHMatchedMediaItem]()
+        trackSegments = 0
+    }
+    
     func run (_ url: URL) {
+        
         let asset = AVAsset(url: url)
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        let numOfSegments = (Int(duration) - (Int(duration) % 180)) / 180
-        print("segments:\(numOfSegments)")
+        trackSegments = (Int(duration) - (Int(duration) % 180)) / 180
+        print("segments:\(trackSegments)")
         
-        guard numOfSegments > 1 else {
+        guard trackSegments > 1 else {
             print("Could not get segments")
             return
         }
         
-        for index in 0...numOfSegments {
+        for index in 0...trackSegments {
             guard active else {
                 break
             }
@@ -61,11 +72,16 @@ class Analyzer : NSObject, SHSessionDelegate {
                 switch exporter.status {
                     case AVAssetExportSession.Status.failed:
                         print("Export failed.")
-                    default:
+                    case AVAssetExportSession.Status.completed:
                         print("Export complete.")
                         urls.append(outputUrl)
+                        DispatchQueue.main.async {
+                            self.updateProgress(Progress(state: .splitting, amount: Float(urls.count) / Float(trackSegments)))
+                        }
+                    default:
+                        print("Export in progress")
                 }
-                if numOfSegments == urls.count {
+                if trackSegments == urls.count {
                     self.analyzeAudioSegments()
                 }
             })
@@ -136,10 +152,15 @@ class Analyzer : NSObject, SHSessionDelegate {
     
     func analyzeAudioSegments (){
         guard !urls.isEmpty else {
-            print("FINISHED ANALYSIS")
+            DispatchQueue.main.async {
+                self.updateProgress(Progress(state: .done, amount: 0.0))
+            }
             return
         }
         analyze(urls.removeFirst())
+        DispatchQueue.main.async {
+            self.updateProgress(Progress(state: .analyzing, amount: 1 - Float(self.urls.count) / Float(self.trackSegments)))
+        }
     }
     
     // The delegate method that the session calls when matching a reference item.
@@ -150,7 +171,7 @@ class Analyzer : NSObject, SHSessionDelegate {
             print(item.title!)
             print("@\(item.matchOffset)")
             DispatchQueue.main.async {
-                self.update()
+                self.refreshTable()
             }
         }
         self.analyzeAudioSegments()

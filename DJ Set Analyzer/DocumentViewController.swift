@@ -8,18 +8,27 @@
 import UIKit
 
 class DocumentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    static let cellID = "TracksTableCell"
-    @IBOutlet weak var tableView: UITableView!
     
     let analyzer : Analyzer = Analyzer()
     
+    static let cellID = "TracksTableCell"
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var documentNameLabel: UILabel!
     
-    var document: UIDocument? {
-        didSet {
-            analyzer.run(self.document!.fileURL)
+    @IBOutlet weak var progressBar: UIProgressView!
+    
+    @IBOutlet weak var progressLabel: UILabel!
+    
+    @IBAction func dismissDocumentViewController() {
+        dismiss(animated: true) {
+            self.document?.close(completionHandler: nil)
+            self.analyzer.reset()
         }
     }
+    
+    var document: UIDocument?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -32,7 +41,23 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.documentNameLabel.text = fileURL.lastPathComponent
                     self.analyzer.active = true
                     self.analyzer.run(fileURL)
-                    analyzer.update = {
+                    analyzer.updateProgress = { progress in
+                        switch progress.state {
+                            case .splitting:
+                                progressBar.layer.opacity = 0.0
+                                progressLabel.text = "Splitting the track"
+                                break
+                            case .analyzing:
+                                progressLabel.text = "Analyzing audio samples"
+                                break
+                            case .done:
+                                progressLabel.text = "Finished"
+                                progressBar.layer.opacity = 0.0
+                                break
+                        }
+                        progressBar.setProgress(progress.amount, animated: true)
+                    }
+                    analyzer.refreshTable = {
                         tableView.reloadData()
                     }
                 }
@@ -40,13 +65,6 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                     // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
             }
         })
-    }
-    
-    @IBAction func dismissDocumentViewController() {
-        dismiss(animated: true) {
-            self.document?.close(completionHandler: nil)
-            self.analyzer.active = false
-        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,7 +89,17 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
 
 class TrackTableCell : UITableViewCell {
     @IBOutlet weak var trackTitle: UILabel!
-    
     @IBOutlet weak var trackArtist: UILabel!
-    
+}
+
+
+enum ProgresState {
+    case splitting
+    case analyzing
+    case done
+}
+
+struct Progress {
+    let state: ProgresState
+    let amount: Float
 }
