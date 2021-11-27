@@ -22,6 +22,9 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var progressLabel: UILabel!
     
     let loadingIndicator = UIActivityIndicatorView(style: .large)
+    
+    let noHitsView = UIImageView()
+    let noHits = UIImage(systemName: "xmark.circle")
         
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
@@ -35,8 +38,11 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadingIndicator.startAnimating()
-        
         tableView.backgroundView = loadingIndicator
+        noHitsView.contentMode = .center
+        let config = UIImage.SymbolConfiguration(pointSize: 64)
+        noHitsView.preferredSymbolConfiguration = config
+        noHitsView.image = noHits
         
             // Access the document
         document?.open(completionHandler: { [self] (success) in
@@ -61,6 +67,10 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                             case .done:
                                 progressLabel.isHidden = true
                                 progressBar.isHidden = true
+                                loadingIndicator.isHidden = true
+                                if analyzer.hits.count == 0 {
+                                    tableView.backgroundView = noHitsView
+                                }
                                 break
                         }
                         progressBar.setProgress(progress.amount, animated: true)
