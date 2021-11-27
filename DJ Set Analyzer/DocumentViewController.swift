@@ -21,6 +21,8 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var progressLabel: UILabel!
     
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
             self.document?.close(completionHandler: nil)
@@ -32,7 +34,7 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadingIndicator.startAnimating()
             // Access the document
         document?.open(completionHandler: { [self] (success) in
             if success {
@@ -44,15 +46,18 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                     analyzer.updateProgress = { progress in
                         switch progress.state {
                             case .splitting:
-                                progressBar.layer.opacity = 0.0
+                                progressBar.isHidden = false
                                 progressLabel.text = "Splitting the track"
                                 break
                             case .analyzing:
+                                if !analyzer.hits.isEmpty {
+                                    loadingIndicator.isHidden = true
+                                }
                                 progressLabel.text = "Analyzing audio samples"
                                 break
                             case .done:
-                                progressLabel.text = "Finished"
-                                progressBar.layer.opacity = 0.0
+                                progressLabel.isHidden = true
+                                progressBar.isHidden = true
                                 break
                         }
                         progressBar.setProgress(progress.amount, animated: true)
