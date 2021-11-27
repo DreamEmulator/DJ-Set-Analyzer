@@ -21,8 +21,8 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var progressLabel: UILabel!
     
-    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
-    
+    let loadingIndicator = UIActivityIndicatorView(style: .large)
+        
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
             self.document?.close(completionHandler: nil)
@@ -35,6 +35,9 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadingIndicator.startAnimating()
+        
+        tableView.backgroundView = loadingIndicator
+        
             // Access the document
         document?.open(completionHandler: { [self] (success) in
             if success {
