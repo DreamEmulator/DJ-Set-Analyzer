@@ -27,12 +27,14 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
             // Access the document
         document?.open(completionHandler: { [self] (success) in
             if success {
-                    // Display the content of the document, e.g.:
-                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-                self.analyzer.active = true
-                analyzer.update = {
-                    tableView.reloadData()
-                    print("UPDATED")
+                if let fileURL = self.document?.fileURL {
+                        // Display the content of the document, e.g.:
+                    self.documentNameLabel.text = fileURL.lastPathComponent
+                    self.analyzer.active = true
+                    self.analyzer.run(fileURL)
+                    analyzer.update = {
+                        tableView.reloadData()
+                    }
                 }
             } else {
                     // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
