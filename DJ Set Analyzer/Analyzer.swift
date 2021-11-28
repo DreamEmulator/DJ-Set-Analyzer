@@ -40,7 +40,7 @@ class Analyzer : NSObject, SHSessionDelegate {
     }
  
     func run (_ url: URL) {
-        let chunkDuration = 60 // Seconds
+        let chunkDuration = 90 // Seconds
         let asset = AVAsset(url: url)
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)

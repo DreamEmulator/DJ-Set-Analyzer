@@ -136,8 +136,9 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
             fatalError("Unable to dequeue TrackTableCell")
         }
         let hit = analyzer.hits[indexPath.row]
-        let (h,m,s) = secondsToHoursMinutesSeconds(Int(hit.matchOffset))
-        cell.trackTitle.text = "\(hit.title!) @ \(String(format: "%02d:%02d:%02d", h, m, s))"
+//        let (h,m,s) = secondsToHoursMinutesSeconds(Int(hit.matchOffset))
+//        cell.trackTitle.text = "\(hit.title!) @ \(String(format: "%02d:%02d:%02d", h, m, s))"
+        cell.trackTitle.text = hit.title
         cell.trackArtist.text = hit.artist
         if selectedIndex == indexPath {
             cell.cellImage.image = copiedImage
