@@ -49,8 +49,24 @@
                                         <nil key="highlightedColor"/>
                                         <color key="shadowColor" systemColor="systemBackgroundColor"/>
                                     </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gg6-JF-Wpt" userLabel="Progress">
+                                        <rect key="frame" x="0.0" y="44" width="375" height="34.5"/>
+                                        <subviews>
+                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PH6-id-Cqb">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="4"/>
+                                                <color key="progressTintColor" systemColor="systemBlueColor"/>
+                                                <color key="trackTintColor" systemColor="secondarySystemFillColor"/>
+                                            </progressView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exporting audio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLm-iJ-Eaw">
+                                                <rect key="frame" x="0.0" y="14" width="375" height="20.5"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jxk-j6-iz7">
-                                        <rect key="frame" x="0.0" y="44" width="375" height="499.5"/>
+                                        <rect key="frame" x="0.0" y="88.5" width="375" height="499.5"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TracksTableCell" textLabel="SOO-9u-ChZ" detailTextLabel="m4l-QE-Mhy" imageView="KjD-l8-IAz" rowHeight="40" style="IBUITableViewCellStyleSubtitle" id="vCo-YL-7BN" customClass="TrackTableCell" customModule="DJ_Set_Analyzer" customModuleProvider="target">
@@ -92,26 +108,17 @@
                                             <outlet property="delegate" destination="M2k-L8-Olo" id="Xse-Fc-Wzn"/>
                                         </connections>
                                     </tableView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gg6-JF-Wpt" userLabel="Progress">
-                                        <rect key="frame" x="0.0" y="553.5" width="375" height="34.5"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exporting audio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLm-iJ-Eaw">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="20.5"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PH6-id-Cqb">
-                                                <rect key="frame" x="0.0" y="30.5" width="375" height="4"/>
-                                                <color key="progressTintColor" systemColor="systemBlueColor"/>
-                                                <color key="trackTintColor" systemColor="secondarySystemFillColor"/>
-                                            </progressView>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WAb-IC-g0u">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WAb-IC-g0u">
                                         <rect key="frame" x="0.0" y="598" width="375" height="69"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                                        <state key="normal" title="Done"/>
+                                        <state key="normal">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Done">
+                                                    <attributes>
+                                                        <font key="NSFont" size="34" name="SFProRounded-Semibold"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                        </state>
                                         <connections>
                                             <action selector="dismissDocumentViewController" destination="M2k-L8-Olo" eventType="touchUpInside" id="Hqu-HM-7pb"/>
                                         </connections>

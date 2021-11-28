@@ -19,6 +19,7 @@ class Analyzer : NSObject, SHSessionDelegate {
     var active = true
     
     var refreshTable : ()->Void = {}
+    
     var updateProgress : (_ : Progress)->Void = { _ in }
     
     var hits = [SHMatchedMediaItem]()

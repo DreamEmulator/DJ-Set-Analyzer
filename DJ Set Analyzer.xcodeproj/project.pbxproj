@@ -16,6 +16,7 @@
 		BD070697274C2986008E75B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD070695274C2986008E75B0 /* LaunchScreen.storyboard */; };
 		BD07069F274D2D0C008E75B0 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD07069E274D2D0C008E75B0 /* Analyzer.swift */; };
 		BD0706A1274D2F10008E75B0 /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0706A0274D2F10008E75B0 /* AudioConverter.swift */; };
+		BD74E41E275362E000EB5DF4 /* WaveGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD74E41D275362E000EB5DF4 /* WaveGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		BD070698274C2986008E75B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BD07069E274D2D0C008E75B0 /* Analyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
 		BD0706A0274D2F10008E75B0 /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
+		BD74E41D275362E000EB5DF4 /* WaveGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				BD070698274C2986008E75B0 /* Info.plist */,
 				BD07069E274D2D0C008E75B0 /* Analyzer.swift */,
 				BD0706A0274D2F10008E75B0 /* AudioConverter.swift */,
+				BD74E41D275362E000EB5DF4 /* WaveGenerator.swift */,
 			);
 			path = "DJ Set Analyzer";
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 			files = (
 				BD07068F274C2982008E75B0 /* Document.swift in Sources */,
 				BD07068D274C2982008E75B0 /* DocumentViewController.swift in Sources */,
+				BD74E41E275362E000EB5DF4 /* WaveGenerator.swift in Sources */,
 				BD07069F274D2D0C008E75B0 /* Analyzer.swift in Sources */,
 				BD0706A1274D2F10008E75B0 /* AudioConverter.swift in Sources */,
 				BD07068B274C2982008E75B0 /* DocumentBrowserViewController.swift in Sources */,
@@ -301,7 +305,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8W7Y9LA367;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DJ Set Analyzer/Info.plist";
@@ -333,7 +337,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 8W7Y9LA367;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DJ Set Analyzer/Info.plist";
