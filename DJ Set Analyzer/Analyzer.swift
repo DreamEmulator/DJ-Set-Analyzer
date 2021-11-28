@@ -40,12 +40,12 @@ class Analyzer : NSObject, SHSessionDelegate {
     }
  
     func run (_ url: URL) {
-        
+        let chunkDuration = 30 // Seconds
         let asset = AVAsset(url: url)
         print("file:\(url)")
         let duration = CMTimeGetSeconds(asset.duration)
         print("duration:\(duration)")
-        trackSegments = (Int(duration) - (Int(duration) % 180)) / 180
+        trackSegments = (Int(duration) - (Int(duration) % chunkDuration)) / chunkDuration
         print("segments:\(trackSegments)")
         
         guard trackSegments > 1 else {
