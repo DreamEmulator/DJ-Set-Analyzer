@@ -98,6 +98,7 @@
                                                     </subviews>
                                                 </tableViewCellContentView>
                                                 <connections>
+                                                    <outlet property="cellImage" destination="KjD-l8-IAz" id="Tco-YC-VuD"/>
                                                     <outlet property="trackArtist" destination="SOO-9u-ChZ" id="QZA-lU-QvX"/>
                                                     <outlet property="trackTitle" destination="m4l-QE-Mhy" id="wwI-bB-ECb"/>
                                                 </connections>

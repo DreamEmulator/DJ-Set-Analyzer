@@ -31,6 +31,14 @@ class Analyzer : NSObject, SHSessionDelegate {
         trackSegments = 0
     }
     
+    func notifyIfDone () {
+        if urls.isEmpty {
+            DispatchQueue.main.async {
+                self.updateProgress(Progress(state: .done, amount: 1.0))
+            }
+        }
+    }
+ 
     func run (_ url: URL) {
         
         let asset = AVAsset(url: url)
@@ -89,7 +97,7 @@ class Analyzer : NSObject, SHSessionDelegate {
             return
         }
     }
-
+    
     func analyze (_ url: URL){
             // Set up the session.
         let session = SHSession()
@@ -153,9 +161,6 @@ class Analyzer : NSObject, SHSessionDelegate {
     
     func analyzeAudioSegments (){
         guard !urls.isEmpty else {
-            DispatchQueue.main.async {
-                self.updateProgress(Progress(state: .done, amount: 0.0))
-            }
             return
         }
         analyze(urls.removeFirst())
@@ -164,7 +169,7 @@ class Analyzer : NSObject, SHSessionDelegate {
         }
     }
     
-    // The delegate method that the session calls when matching a reference item.
+        // The delegate method that the session calls when matching a reference item.
     func session(_ session: SHSession, didFind match: SHMatch) {
             // Do something with the matched results.
         match.mediaItems.forEach { item in
@@ -174,6 +179,7 @@ class Analyzer : NSObject, SHSessionDelegate {
             DispatchQueue.main.async {
                 self.refreshTable()
             }
+            notifyIfDone()
         }
         self.analyzeAudioSegments()
     }
@@ -183,5 +189,6 @@ class Analyzer : NSObject, SHSessionDelegate {
             // No match found.
         print("No match")
         self.analyzeAudioSegments()
+        notifyIfDone()
     }
 }

@@ -6,6 +6,7 @@
     //
 
 import UIKit
+import CoreHaptics
 
 class DocumentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -21,11 +22,22 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var progressLabel: UILabel!
     
+    var selectedIndex = IndexPath(row: -1, section: 0)
+    
+    var previousSelectedIndex = IndexPath(row: -1, section: 0)
+    
     let loadingIndicator = UIActivityIndicatorView(style: .large)
     
     let noHitsView = UIImageView()
+    
     let noHits = UIImage(systemName: "xmark.circle")
-        
+    
+    let notificationFeedbackGenerator = UINotificationFeedbackGenerator()
+    
+    let copiedImage = UIImage(systemName: "doc.on.clipboard.fill")
+    
+    let musicNote = UIImage(systemName: "music.note")
+    
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
             self.document?.close(completionHandler: nil)
@@ -37,6 +49,7 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        notificationFeedbackGenerator.prepare()
         loadingIndicator.startAnimating()
         tableView.backgroundView = loadingIndicator
         noHitsView.contentMode = .center
@@ -65,8 +78,8 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                                 progressLabel.text = "Analyzing audio samples"
                                 break
                             case .done:
-                                progressLabel.isHidden = true
-                                progressBar.isHidden = true
+                                progressLabel.text = "\(analyzer.hits.count) tracks recognized"
+                                progressBar.progressTintColor = .systemGreen
                                 loadingIndicator.isHidden = true
                                 if analyzer.hits.count == 0 {
                                     tableView.backgroundView = noHitsView
@@ -81,6 +94,7 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             } else {
                     // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+                notificationFeedbackGenerator.notificationOccurred(.error)
             }
         })
     }
@@ -95,12 +109,25 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         cell.trackTitle.text = analyzer.hits[indexPath.row].title
         cell.trackArtist.text = analyzer.hits[indexPath.row].artist
+        if selectedIndex == indexPath {
+            cell.cellImage.image = copiedImage
+            cell.cellImage.tintColor = .systemGreen
+        } else {
+            cell.cellImage.image = musicNote
+            cell.cellImage.tintColor = .systemBlue
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pasteboard = UIPasteboard.general
         pasteboard.string = "\(analyzer.hits[indexPath.row].artist!) \(analyzer.hits[indexPath.row].title!)"
+        previousSelectedIndex = selectedIndex
+        selectedIndex = indexPath
+        let refreshRows = [previousSelectedIndex, selectedIndex].filter { $0.row != -1 }
+        tableView.reloadRows(at: refreshRows, with: .automatic)
+        notificationFeedbackGenerator.notificationOccurred(.success)
     }
     
 }
@@ -108,6 +135,7 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
 class TrackTableCell : UITableViewCell {
     @IBOutlet weak var trackTitle: UILabel!
     @IBOutlet weak var trackArtist: UILabel!
+    @IBOutlet weak var cellImage: UIImageView!
 }
 
 
@@ -121,3 +149,4 @@ struct Progress {
     let state: ProgresState
     let amount: Float
 }
+
