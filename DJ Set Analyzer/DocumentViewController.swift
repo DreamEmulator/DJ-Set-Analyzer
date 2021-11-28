@@ -65,20 +65,42 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.documentNameLabel.text = fileURL.lastPathComponent
                     self.analyzer.active = true
                     self.analyzer.run(fileURL)
+                    
                     analyzer.updateProgress = { progress in
                         switch progress.state {
                             case .splitting:
                                 progressBar.isHidden = false
-                                progressLabel.text = "Splitting the track"
+                                UIView.transition(with: progressLabel,
+                                                  duration: 0.35,
+                                                  options: .transitionCrossDissolve,
+                                                  animations:
+                                                    { () -> Void in
+                                    progressLabel.text = "Splitting the track"
+                                }, completion: nil);
+                                
                                 break
                             case .analyzing:
                                 if !analyzer.hits.isEmpty {
                                     loadingIndicator.isHidden = true
                                 }
-                                progressLabel.text = "Analyzing audio samples"
+                                UIView.transition(with: progressLabel,
+                                                  duration: 0.35,
+                                                  options: .transitionCrossDissolve,
+                                                  animations:
+                                                    { () -> Void in
+                                    progressLabel.text = "Analyzing audio samples"
+                                }, completion: nil);
+                                
                                 break
                             case .done:
-                                progressLabel.text = "\(analyzer.hits.count) tracks recognized"
+                                UIView.transition(with: progressLabel,
+                                                  duration: 0.35,
+                                                  options: .transitionCrossDissolve,
+                                                  animations:
+                                                    { () -> Void in
+                                    progressLabel.text = "\(analyzer.hits.count) tracks recognized"
+                                }, completion: nil);
+                                
                                 progressBar.progressTintColor = .systemGreen
                                 loadingIndicator.isHidden = true
                                 if analyzer.hits.count == 0 {
@@ -89,15 +111,13 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                         progressBar.setProgress(progress.amount, animated: true)
                     }
                     analyzer.refreshTable = {
-                        
                         UIView.transition(with: tableView,
                                           duration: 0.35,
                                           options: .transitionCrossDissolve,
                                           animations:
                                             { () -> Void in
                             self.tableView.reloadData()
-                        },
-                                          completion: nil);
+                        }, completion: nil);
                     }
                 }
             } else {
