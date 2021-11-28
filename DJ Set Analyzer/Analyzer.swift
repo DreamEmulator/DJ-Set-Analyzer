@@ -18,7 +18,7 @@ class Analyzer : NSObject, SHSessionDelegate {
     
     var active = true
     
-    var refreshTable : ()->Void = {}
+    var refreshTable : ()-> Void = {}
     
     var updateProgress : (_ : Progress)->Void = { _ in }
     
@@ -174,6 +174,7 @@ class Analyzer : NSObject, SHSessionDelegate {
             // Do something with the matched results.
         match.mediaItems.forEach { item in
             hits.append(item)
+            hits.sort { $0.matchOffset < $1.matchOffset }
             print(item.title!)
             print("@\(item.matchOffset)")
             DispatchQueue.main.async {

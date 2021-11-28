@@ -89,7 +89,15 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
                         progressBar.setProgress(progress.amount, animated: true)
                     }
                     analyzer.refreshTable = {
-                        tableView.reloadData()
+                        
+                        UIView.transition(with: tableView,
+                                          duration: 0.35,
+                                          options: .transitionCrossDissolve,
+                                          animations:
+                                            { () -> Void in
+                            self.tableView.reloadData()
+                        },
+                                          completion: nil);
                     }
                 }
             } else {
@@ -107,8 +115,10 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellID, for: indexPath) as? TrackTableCell else {
             fatalError("Unable to dequeue TrackTableCell")
         }
-        cell.trackTitle.text = analyzer.hits[indexPath.row].title
-        cell.trackArtist.text = analyzer.hits[indexPath.row].artist
+        let hit = analyzer.hits[indexPath.row]
+        let (h,m,s) = secondsToHoursMinutesSeconds(Int(hit.matchOffset))
+        cell.trackTitle.text = "\(hit.title!) @ \(String(format: "%02d:%02d:%02d", h, m, s))"
+        cell.trackArtist.text = hit.artist
         if selectedIndex == indexPath {
             cell.cellImage.image = copiedImage
             cell.cellImage.tintColor = .systemGreen
@@ -128,6 +138,10 @@ class DocumentViewController: UIViewController, UITableViewDataSource, UITableVi
         let refreshRows = [previousSelectedIndex, selectedIndex].filter { $0.row != -1 }
         tableView.reloadRows(at: refreshRows, with: .automatic)
         notificationFeedbackGenerator.notificationOccurred(.success)
+    }
+    
+    func secondsToHoursMinutesSeconds(_ seconds: Int) -> (Int, Int, Int) {
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
     
 }
